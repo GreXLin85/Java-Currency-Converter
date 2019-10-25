@@ -28,8 +28,17 @@ public class Main {
                         .build();
 
         Response response = client.newCall(request).execute();
+        String durum = null;
 
-        if (response.code() == 200){
+        if (FROM == "" || FROM == null || TO == "" || TO == null) {
+            durum = "FROM_OR_NULL_EMPTY";
+        }else if (response.code() != 200) {
+            durum = ""+response.code();
+        }else{
+            durum = "OK";
+        }
+
+        if (durum.equals("OK")){
             JSONParser parser = new JSONParser();
 
             Object jsonObj = parser.parse(response.body().string());
@@ -41,10 +50,8 @@ public class Main {
             String rate_for_amount = (String) asd.get("rate_for_amount");
             String rate = (String) asd.get("rate");
             System.out.println(AMOUNT+FROM+"\n"+rate_for_amount+TO+"\nDolar kuru : "+rate);
-
-
         }else{
-            System.out.println("Bir sorun var!\nSorun kodu : "+response.code());
+            System.out.println("Bir sorun var!\nSorun kodu : "+durum);
         }
 
     }
